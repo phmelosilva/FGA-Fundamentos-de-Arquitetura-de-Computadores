@@ -1,0 +1,15 @@
+.data
+
+ola: .asciiz "Ola Mundo\n"
+
+.text
+main:
+
+#Etapa de imprimir o resultado da String
+li      $v0,     4          #System call #4 - print string
+la      $a0,     ola        # Carregando a string pelo seu endereço
+syscall                     #Execução
+
+# Exiting process
+li      $v0,    10      #v0 = exit
+syscall

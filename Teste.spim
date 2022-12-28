@@ -1,0 +1,45 @@
+.data
+ans: .asciiz "There are "
+ans2: .asciiz " psi left to inflate tire to "
+ans3: .asciiz " psi. \n"
+
+.text
+main:
+
+# Fisrt Step: Read Desired Pressure
+    li      $v0,    5               # Loading read int instruction
+    syscall                         # Makes a syscall to catch the user input and stores it in v0
+    move    $t1,    $v0             # Move value stored in v0 to t1
+
+# Second Step: Read Actual Pressure
+    li      $v0,    5               # Loading read int instruction
+    syscall                         # Makes a syscall to catch the user input and stores it in v0
+    move    $t2,    $v0             # Move value stored in v0 to t1
+
+# Third Step: Subtract Each Value
+    sub     $t0,    $t1,    $t2     # result = $t1 - $t2
+
+# Last Step: Print Result
+    li      $v0,    4               # system call #4 - print string
+    la      $a0,    ans
+    syscall                         # execute
+
+    li      $v0,    1               # system call #1 - print int
+    move    $a0,    $t0
+    syscall                         # execute
+
+    li      $v0,    4               # system call #4 - print string
+    la      $a0,    ans2
+    syscall                         # execute
+
+    li      $v0,    1               # system call #1 - print int
+    move    $a0,    $t1
+    syscall                         # execute
+
+    li      $v0,    4               # system call #4 - print string
+    la      $a0,    ans3
+    syscall                         # execute
+
+# Exiting process
+    li      $v0,    10              # $v0 = exit
+    syscall
