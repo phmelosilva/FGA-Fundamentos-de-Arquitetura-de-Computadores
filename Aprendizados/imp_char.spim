@@ -1,0 +1,13 @@
+.data
+    caractere: .byte 'A' #caractere a ser impresso
+.text
+main:
+    
+li $v0, 4   #imprimir char ou string
+la $a0, caractere #indicar o endereço em que está a mensagem
+syscall     #faça! imprima
+
+# terminando a execução do programa
+li      $v0,    10      #v0 = exit
+syscall
+

@@ -1,0 +1,13 @@
+.data
+    idade: .word 56 #valor inteiro na memória RAM
+
+.text
+
+main:
+    li $v0, 1 #imprime int
+    lw $a0, idade #instrução para carregar endereço da RAM no registrador
+    syscall
+
+    # terminando a execução do programa
+li      $v0,    10      #v0 = exit
+syscall

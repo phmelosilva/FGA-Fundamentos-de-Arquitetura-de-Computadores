@@ -1,0 +1,46 @@
+.data
+    msg: .asciiz "Forneça um número: "
+    par: .asciiz "O número é par."
+    impar: .asciiz "O número é ímpar."
+
+.text
+main:
+    #imprimindo mensagem para o usuário
+    li $v0, 4 #carregando no registrador v0 uma syscall
+    la $a0, msg #indicar o endereço em que está a mensagem
+    syscall  #faça! imprima
+
+    #ler o número
+    li $v0, 5
+    syscall  #faça! leia
+
+    #carregando 2 em um registrador qualquer
+    li $t0, 2
+    div $v0, $t0
+
+    #Move From hi, hi = registrador
+    mfhi $t1 #possui o resto da divisão por 2
+
+    beq $t1, $zero, imprimePar #se for zero, pule para imprimePar
+
+    # Ele só vem para cá se beq for falso
+  
+    li $v0, 4   #imprimindo mensagem para o usuário
+    la $a0, impar #indicar o endereço em que está a mensagem
+    syscall
+
+    # terminando a execução do programa
+    li      $v0,    10      #v0 = exit
+    syscall
+
+    imprimePar:
+   
+        li $v0, 4   #imprimindo mensagem para o usuário
+        la $a0, par #indicar o endereço em que está a mensagem
+        syscall
+        # terminando a execução do programa
+        li      $v0,    10      #v0 = exit
+        syscall
+
+
+

@@ -4,7 +4,7 @@ O objetivo neste exercício é simples: você deve ler n números e determinar o
 
 ## Entrada
 ---
-A entrada é composta por diversas linhas. A primeira linha contém um inteiro n (1 <= n <= 10^5). As n linhas seguintes contém cada uma um inteiro.
+A entrada é composta por diversas linhas. A primeira linha contém um inteiro n (1 <= n <= 10⁵). As n linhas seguintes contém cada uma um inteiro.
 
 ## Saída
 ---

@@ -1,0 +1,17 @@
+.data
+    #área para dados na memória principal
+    maior: 
+ 
+.text
+    #área para instruções do programa
+
+
+#Função a ser executada pelo compilador
+main:
+
+
+
+
+# terminando a execução do programa
+li      $v0,    10      #v0 = exit
+syscall

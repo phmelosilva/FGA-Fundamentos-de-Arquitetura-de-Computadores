@@ -1,0 +1,18 @@
+.data
+    #área para dados na memória principal
+ola: .asciiz "Ola Mundo\n" #mensagem a ser exibida para o usuário
+ 
+.text
+    #área para instruções do programa
+
+#Função a ser executada pelo compilador
+main:
+
+#Etapa de imprimir o resultado da String
+li      $v0,     4          #instrução para impressão de String
+la      $a0,     ola        #indicar o endereço em que está a mensagem
+syscall                     #faça! imprima
+
+# terminando a execução do programa
+li      $v0,    10      #v0 = exit
+syscall
