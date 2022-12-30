@@ -1,0 +1,24 @@
+.data
+    conta: .word 0 #conta inicial
+.text
+main:
+    #ler consumo de água
+    li $v0, 5
+    syscall
+    move $t0, $v0 #valor lido
+
+    ble $t0, 10, planoBasico
+
+
+    planoBasico:
+        lw $a0, conta
+        addi $a0, $a0, 7
+        li $v0, 1
+        syscall
+
+        #encerrando execução
+        li $v0, 10
+        syscall
+
+
+
