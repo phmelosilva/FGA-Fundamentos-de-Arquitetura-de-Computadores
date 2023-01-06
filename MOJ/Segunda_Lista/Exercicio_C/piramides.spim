@@ -1,0 +1,55 @@
+.data
+    zero: .asciiz "0" 
+    pulaLinha: .asciiz "\n" 
+    espaco: .asciiz " "
+
+.text
+main:
+    li $t0, 1 #carrega o valor 1 para o registrador $t0 
+    li $t1, 1 #carrega o valor 1 para o registrador $t1
+    
+     #ler numero para piramide
+    li $v0, 5
+    syscall
+    move $t2, $v0 #valor lido
+
+    while: 
+        slt $t3, $t0, $t2 #armazena 1 em t3 se t0 < t2 ou 0 se t0 >= t2
+        beq $t3, 0, saidaWhile #se $t3 = 0, pula para saida do Loop
+
+        for:
+            #Printa o 0 se for menor que 10
+            slt $t4, $t0, 10 # se $t0 < 10, $t4 = 1, se não $t4 = 0
+            beq $t4, 1, printaZero
+            printaZero:
+                li $v0, 4
+                la $a0, zero
+                syscall
+            #Printa o valor de cada numero 
+            li $v0, 1
+            move $a0, $t0 #usa $t0 porque e para repetir o mesmo número naquela linha
+            syscall
+            #Printa os espaços
+            li $v0, 4
+            la $a0, espaco
+            syscall
+            #Pula as linhas para cada parte da piramide
+            li $v0, 4
+            la $a0, pulaLinha
+            syscall
+
+            addi $t1, $t1, 1 #adiciona 1 na variavel contadora do for
+
+            slt $t3, $t1, $t0 #armazena 1 em t3 se t1 < t0 ou 0 se t1 >= t0
+            beq $t3, 0, saidaFor #se $t3 = 0, pula para saida deste Loop
+
+            j for 
+
+        saidaFor:
+            addi $t0, $t0, 1 #adiciona 1 na variavel contadora do while
+            j while
+
+    saidaWhile:
+        #Encerra o programa
+        li $v0, 10
+        syscall
