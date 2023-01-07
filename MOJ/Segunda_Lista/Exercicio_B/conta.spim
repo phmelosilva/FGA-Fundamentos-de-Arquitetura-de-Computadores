@@ -1,24 +1,85 @@
 .data
     conta: .word 0 #conta inicial
+    pulaLinha: .asciiz "\n" 
 .text
 main:
-    #ler consumo de água
+    #ler consumo de agua
     li $v0, 5
     syscall
     move $t0, $v0 #valor lido
 
-    ble $t0, 10, planoBasico
+    ble $t0, 10, planoBasico # t0 <= 10
+
+    #Plano entre 11 - 30 m³
+    bgt $t0, 11, menorIgual1 # t0 > 11
+    menorIgual1:
+        ble $t0, 30, planoVinte # t0 <=30
+
+    #Plano entre 31 - 100 m³
+    bgt $t0, 30, menorIgual2 #t0 > 31
+    menorIgual2:
+        ble $t0, 100, planoCentoQuarenta #t0 <= 100
+
+    #Plano maior que 101m³
+    bgt $t0, 101, planoCem #t0 > 101
 
 
-    planoBasico:
+    planoBasico: #quando compra apenas o plano basico
         lw $a0, conta
         addi $a0, $a0, 7
-        li $v0, 1
+        li $v0, 1 #printando valor
         syscall
 
-        #encerrando execução
-        li $v0, 10
+        li $v0, 4
+        la  $a0, pulaLinha
+        syscall
+        j Finaliza
+
+    planoVinte: #compra entre 11 e 20 m³
+        lw $a0, conta
+        addi $a0, $a0, 7 #somando 7 reais básicos
+        sub $t1, $t0, 10 
+        add $a0, $a0, $t1 #adicionando valor do intervalo 11 - 30 m³
+
+        li $v0, 1 #printando valor
         syscall
 
+        li $v0, 4
+        la  $a0, pulaLinha
+        syscall
+        j Finaliza
 
+    planoCentoQuarenta: #compra entre 31 e 100m³
+        lw $a0, conta
+        addi $a0, $a0, 27 #somando 7 reais básicos e 20 reais do consumo de 11 - 30m³
+        sub $t1, $t0, 30
+        mul $t2, $t1, 2
+        add $a0, $a0, $t2 #adicionando valor do intervalo 31 - 100 m³
 
+        li $v0, 1 #printando valor
+        syscall
+
+        li $v0, 4
+        la  $a0, pulaLinha
+        syscall
+        j Finaliza
+
+    planoCem: #compra maior que 101m³
+        lw $a0, conta
+        addi $a0, $a0, 167 #somando os planos anteriores
+        sub $t1, $t0, 100
+        mul $t2, $t1, 5
+        add $a0, $a0, $t2 #adicionando valor do intervalo > 101 m³
+
+        li $v0, 1 #printando valor
+        syscall
+
+        li $v0, 4
+        la  $a0, pulaLinha
+        syscall
+        j Finaliza
+
+    #encerrando execucao
+    Finaliza:
+            li $v0, 10
+            syscall
