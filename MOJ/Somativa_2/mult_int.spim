@@ -1,55 +1,99 @@
 multfac:
-#pre-passos:
+# Pre-passos:
     addi $t4, $zero, 32
-    
+    # Inicializa o registrador $t4 com 32, que será usado para controlar o loop no passo 5.
+
     slt $t8, $a0, $zero
     slt $t9, $a1, $zero
+    # Verifica se os valores dos registradores $a0 e $a1 são menores que zero.
+    # Se for, o resultado da comparação é armazenado em $t8 ou $t9, respectivamente.
 
-    beq $t8, $zero, verificacao_a1   
+    beq $t8, $zero, verificando_a1
     nor $a0, $a0, $zero
     addi $a0, $a0, 1
+    # Se o valor de $a0 for menor que zero, ele é transformado em seu valor absoluto.
+    # Isso é feito ao primeiro negar todos os bits do valor com a instrução nor,
+    # e em seguida adicionando 1 ao resultado.
 
-verificacao_a1:
+    # O controle é então transferido para a etiqueta verificando_a1.
+
+verificando_a1:
     beq $t9, $zero, passo1
     nor $a1, $a1, $zero
     addi $a1, $a1, 1
+    # Se o valor de $a1 for menor que zero, ele é transformado em seu valor absoluto.
+    # A lógica é a mesma descrita para o registrador $a0.
 
-#passo 1:
-    passo1:
+    # O controle é então transferido para a etiqueta passo1.
+
+# Passo 1:
+passo1:
     move $t0, $zero
+    # Inicializa o registrador $t0 com zero, que será usado para armazenar o resultado da multiplicação.
 
-#passo 2:
+# Passo 2:
+passo2:
     move $t1, $a1
+    # Armazena o valor de $a1 no registrador $t1, que será usado como o multiplicador.
 
-#passo 3:
+# Passo 3:
 passo3:
     andi $t2, $t1, 1
+    # Verifica se o último bit do multiplicador $t1 é 1.
+    # Se for, o resultado da operação é armazenado em $t2.
+
     beq $t2, $zero, passo4
     add $t0, $t0, $a0
+    # Se o último bit do multiplicador $t1 for 1, o multiplicando $a0 é adicionado ao resultado $t0.
+    # O controle é então transferido para a etiqueta passo4.
 
-#passo 4:
+# Passo 4:
 passo4:
-    andi $t3, $t0, 1 
+    andi $t3, $t0, 1
     srl $t0, $t0, 1
     srl $t1, $t1, 1
+    # Desloca os bits dos registradores $t0 e $t1 uma posição para a direita.
+    # Isso é feito com a instrução srl (shift right logical).
+    # Ao mesmo tempo, o último bit do registrador $t0 é armazenado em $t3
+    # com a instrução andi (and immediate).
 
     sll $t3, $t3, 31
+    # Desloca o valor armazenado em $t3 31 posições para a esquerda.
+    # Isso é feito com a instrução sll (shift left logical).
+
     add $t1, $t1, $t3
+    # Adiciona o resultado do deslocamento ao multiplicador armazenado em $t1.
+    
 
 #passo 5:
     addi $t4, $t4, -1
     beq $t4, $zero, sinal
+    # Decrementa o contador armazenado em $t4 e verifica se ele chegou a zero.
+    # Se ainda não chegou, o controle é transferido para a etiqueta passo3,
+    # onde o próximo bit do multiplicador é verificado.
+    # Se o contador chegou a zero, o controle é transferido para a etiqueta sinal.
     j passo3
 
 #retorno:
 sinal:
-    beq $t8, $t9, final
+    beq $t8, $t9, fim
+    # Verifica se os valores dos registradores $a0 e $a1 eram negativos.
+    # Se ambos eram negativos, o resultado da multiplicação é positivo,
+    # e o controle é transferido para a etiqueta fim.
+
     nor $t1, $t1, $zero
     nor $t0, $t0, $zero    
     addi $t1, $t1, 1
+    # Se pelo menos um dos valores era negativo, o resultado da multiplicação é negativo.
+    # Para obter o valor absoluto do resultado, o mesmo processo descrito no início
+    # é aplicado aos registradores $t0 e $t1.
 
-final:
+
+fim:
     mthi $t0
     mtlo $t1
+    # Armazena o resultado da multiplicação nos registradores HI e LO,
+    # que são usados para retornar o resultado de operações de 64 bits.
     
     jr $ra
+    # O controle é transferido de volta para a instrução que chamou a subrotina multfac.
